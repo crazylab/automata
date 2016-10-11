@@ -1,4 +1,4 @@
-package components;
+package main.components;
 
 public class State {
     private final String name;
@@ -14,8 +14,9 @@ public class State {
         return name;
     }
 
-    public void markAsFinal() {
+    public State markAsFinal() {
         this.isMarkedAsFinal = true;
+        return this;
     }
 
     public boolean isFinal() {

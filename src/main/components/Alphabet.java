@@ -1,4 +1,4 @@
-package components;
+package main.components;
 
 public class Alphabet {
     private final String alphabetName;

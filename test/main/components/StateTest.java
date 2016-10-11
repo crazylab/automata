@@ -1,4 +1,4 @@
-package components;
+package main.components;
 
 import org.junit.Test;
 

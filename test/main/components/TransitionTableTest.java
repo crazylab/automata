@@ -1,4 +1,4 @@
-package components;
+package main.components;
 
 import junit.framework.Assert;
 import org.junit.Before;
