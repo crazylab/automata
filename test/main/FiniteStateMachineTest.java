@@ -6,6 +6,7 @@ import main.components.TransitionTable;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -14,7 +15,7 @@ public class FiniteStateMachineTest {
     @Test
     public void ShouldBeAbleToBuildAFiniteStateMachine() throws Exception {
         State q1 = new State("q1");                     //Initial State
-        State q2 = new State("q2").markAsFinal();       //Final State
+        State q2 = new State("q2");                     //Final State
         State q3 = new State("q3");                     //Dead state
 
         Alphabet one = new Alphabet("1");
@@ -29,7 +30,10 @@ public class FiniteStateMachineTest {
         transitionTable.addTransition(q3, one, q3);
         transitionTable.addTransition(q3, zero, q3);
 
-        FiniteStateMachine DFA = new FiniteStateMachine(q1, transitionTable);
+        HashSet<State> finalStates = new HashSet<>();
+        finalStates.add(q2);
+
+        FiniteStateMachine DFA = new FiniteStateMachine(q1, transitionTable, finalStates);
 
         assertTrue(DFA.isAccepted(Arrays.asList(zero, one, zero, zero)));
         assertFalse(DFA.isAccepted(Arrays.asList(zero, one, zero, zero, one, zero)));

@@ -7,11 +7,18 @@ import static org.junit.Assert.*;
 public class StateTest {
 
     @Test
-    public void ShouldBeAbleToMarkAStateAsFinalState() throws Exception {
+    public void ShouldEqualWithAnotherStateWithSameName() throws Exception {
         State q0 = new State("q0");
-        assertFalse(q0.isFinal());
+        State anotherQ0 = new State("q0");
 
-        q0.markAsFinal();
-        assertTrue(q0.isFinal());
+        assertEquals(anotherQ0, q0);
+    }
+
+    @Test
+    public void ShouldNotEqualWithAnotherStateWithDifferentName() throws Exception {
+        State q0 = new State("q0");
+        State q1 = new State("q1");
+
+        assertNotSame(q1, q0);
     }
 }

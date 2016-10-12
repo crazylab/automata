@@ -2,11 +2,9 @@ package main.components;
 
 public class State {
     private final String name;
-    private boolean isMarkedAsFinal;
 
     public State(String name) {
         this.name = name;
-        this.isMarkedAsFinal = false;
     }
 
     @Override
@@ -14,12 +12,19 @@ public class State {
         return name;
     }
 
-    public State markAsFinal() {
-        this.isMarkedAsFinal = true;
-        return this;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        State state = (State) o;
+
+        return name != null ? name.equals(state.name) : state.name == null;
+
     }
 
-    public boolean isFinal() {
-        return isMarkedAsFinal;
+    @Override
+    public int hashCode() {
+        return name != null ? name.hashCode() : 0;
     }
 }
