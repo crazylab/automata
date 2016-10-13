@@ -1,6 +1,8 @@
 package main.components;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TransitionTable {
 
@@ -23,5 +25,17 @@ public class TransitionTable {
 
     public State nextState(State presentState, Alphabet alphabet) {
         return transitions.get(presentState).get(alphabet);
+    }
+
+    public boolean isValidFor(Set<State> states, Set<Alphabet> inputAlphabets) {
+        if(transitions.keySet().equals(states)){
+            for (State state : transitions.keySet()) {
+                if (!transitions.get(state).keySet().equals(inputAlphabets))
+                    return false;
+            }
+            return true;
+        }
+        return false;
+
     }
 }

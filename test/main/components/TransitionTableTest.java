@@ -1,8 +1,11 @@
 package main.components;
 
-import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.HashSet;
+
+import static junit.framework.Assert.*;
 
 public class TransitionTableTest {
 
@@ -36,13 +39,64 @@ public class TransitionTableTest {
         transitionTable.addTransition(q4, zero, q4);
         transitionTable.addTransition(q4, one, q4);
 
-        Assert.assertEquals(q2, transitionTable.nextState(q1,zero));
-        Assert.assertEquals(q1, transitionTable.nextState(q1,one));
-        Assert.assertEquals(q2, transitionTable.nextState(q2,zero));
-        Assert.assertEquals(q3, transitionTable.nextState(q2,one));
-        Assert.assertEquals(q3, transitionTable.nextState(q3,zero));
-        Assert.assertEquals(q4, transitionTable.nextState(q3,one));
-        Assert.assertEquals(q4, transitionTable.nextState(q4,zero));
-        Assert.assertEquals(q4, transitionTable.nextState(q4,one));
+        assertEquals(q2, transitionTable.nextState(q1,zero));
+        assertEquals(q1, transitionTable.nextState(q1,one));
+        assertEquals(q2, transitionTable.nextState(q2,zero));
+        assertEquals(q3, transitionTable.nextState(q2,one));
+        assertEquals(q3, transitionTable.nextState(q3,zero));
+        assertEquals(q4, transitionTable.nextState(q3,one));
+        assertEquals(q4, transitionTable.nextState(q4,zero));
+        assertEquals(q4, transitionTable.nextState(q4,one));
+    }
+
+    @Test
+    public void ShouldReturnTrueWhenTableContainsAllTheGivenStates() throws Exception {
+        TransitionTable transitionTable = new TransitionTable();
+        transitionTable.addTransition(q1, zero, q2);
+        transitionTable.addTransition(q1, one, q1);
+        transitionTable.addTransition(q2, zero, q2);
+        transitionTable.addTransition(q2, one, q3);
+        transitionTable.addTransition(q3, zero, q3);
+        transitionTable.addTransition(q3, one, q4);
+        transitionTable.addTransition(q4, zero, q4);
+        transitionTable.addTransition(q4, one, q4);
+
+
+        HashSet<State> inputStates = new HashSet<>();
+        inputStates.add(q1);
+        inputStates.add(q2);
+        inputStates.add(q3);
+        inputStates.add(q4);
+
+        HashSet<Alphabet> inputAlphabets = new HashSet<>();
+        inputAlphabets.add(zero);
+        inputAlphabets.add(one);
+
+        assertTrue(transitionTable.isValidFor(inputStates, inputAlphabets));
+    }
+
+    @Test
+    public void ShouldReturnFalseWhenTableDoesNotContainsAnyOfTheStateOrHasMissingTransitionForGivenStatesAndAlphabets() throws Exception {
+        TransitionTable transitionTable = new TransitionTable();
+        transitionTable.addTransition(q1, zero, q2);
+        transitionTable.addTransition(q1, one, q1);
+        transitionTable.addTransition(q2, zero, q2);
+        transitionTable.addTransition(q2, one, q3);
+        transitionTable.addTransition(q3, zero, q3);
+        transitionTable.addTransition(q3, one, q4);
+        transitionTable.addTransition(q4, zero, q4);
+        transitionTable.addTransition(q4, one, q4);
+
+
+        HashSet<State> inputStates = new HashSet<>();
+        inputStates.add(q1);
+        inputStates.add(q2);
+        inputStates.add(q3);
+        inputStates.add(q4);
+
+        HashSet<Alphabet> inputAlphabets = new HashSet<>();
+        inputAlphabets.add(zero);
+
+        assertFalse(transitionTable.isValidFor(inputStates,inputAlphabets));
     }
 }
