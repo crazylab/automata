@@ -1,8 +1,6 @@
 package main.utils;
 
-import main.components.Alphabet;
-import main.components.State;
-import main.components.TransitionTable;
+import main.components.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -20,7 +18,7 @@ public class InputMachineDescription {
         this.machineDesc = (JSONObject) new JSONParser().parse(machineDesc);
     }
 
-    public String getName() {
+    public String name() {
         return (String) machineDesc.get("name");
     }
 
@@ -28,7 +26,7 @@ public class InputMachineDescription {
         return (String) machineDesc.get("type");
     }
 
-    public Set<State> states() {
+    public SetOfStates states() {
         JSONObject tuple = (JSONObject) machineDesc.get("tuple");
         Collection<String> statesAsArray = (Collection<String>) tuple.get("states");
 
@@ -36,10 +34,10 @@ public class InputMachineDescription {
         for (String stateName : statesAsArray) {
             states.add(new State(stateName));
         }
-        return states;
+        return new SetOfStates(states);
     }
 
-    public Set<State> finalStates() {
+    public SetOfStates finalStates() {
         JSONObject tuple = (JSONObject) machineDesc.get("tuple");
         Collection<String> finalStatesAsArray = (Collection<String>) tuple.get("final-states");
 
@@ -47,7 +45,7 @@ public class InputMachineDescription {
         for (String stateName : finalStatesAsArray) {
             finalStates.add(new State(stateName));
         }
-        return finalStates;
+        return new SetOfStates(finalStates);
     }
 
     public State startState() {
@@ -55,14 +53,14 @@ public class InputMachineDescription {
         return new State((String) tuple.get("start-state"));
     }
 
-    public Set<Alphabet> alphabet() {
+    public AlphabetSet alphabets() {
         JSONObject tuple = (JSONObject) machineDesc.get("tuple");
         Collection<String> alphabetCollection = (Collection<String>) tuple.get("alphabets");
         HashSet<Alphabet> alphabets = new HashSet<>();
         for (String alphabetName : alphabetCollection) {
             alphabets.add(new Alphabet(alphabetName));
         }
-        return alphabets;
+        return new AlphabetSet(alphabets);
     }
 
     public TransitionTable transitionTable() {
@@ -80,7 +78,15 @@ public class InputMachineDescription {
         return transitionTable;
     }
 
-    public List<Alphabet> passCases() {
-        return null;
+    public List<String> passCases() {
+        return (List<String>) machineDesc.get("pass-cases");
+    }
+
+    public List<String> failCases() {
+        return (List<String>) machineDesc.get("fail-cases");
+    }
+
+    public String tupleDesc() {
+        return machineDesc.get("tuple").toString();
     }
 }

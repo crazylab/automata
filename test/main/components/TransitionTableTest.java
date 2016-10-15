@@ -39,14 +39,14 @@ public class TransitionTableTest {
         transitionTable.addTransition(q4, zero, q4);
         transitionTable.addTransition(q4, one, q4);
 
-        assertEquals(q2, transitionTable.nextState(q1,zero));
-        assertEquals(q1, transitionTable.nextState(q1,one));
-        assertEquals(q2, transitionTable.nextState(q2,zero));
-        assertEquals(q3, transitionTable.nextState(q2,one));
-        assertEquals(q3, transitionTable.nextState(q3,zero));
-        assertEquals(q4, transitionTable.nextState(q3,one));
-        assertEquals(q4, transitionTable.nextState(q4,zero));
-        assertEquals(q4, transitionTable.nextState(q4,one));
+        assertEquals(q2, transitionTable.nextState(q1, zero));
+        assertEquals(q1, transitionTable.nextState(q1, one));
+        assertEquals(q2, transitionTable.nextState(q2, zero));
+        assertEquals(q3, transitionTable.nextState(q2, one));
+        assertEquals(q3, transitionTable.nextState(q3, zero));
+        assertEquals(q4, transitionTable.nextState(q3, one));
+        assertEquals(q4, transitionTable.nextState(q4, zero));
+        assertEquals(q4, transitionTable.nextState(q4, one));
     }
 
     @Test
@@ -61,18 +61,9 @@ public class TransitionTableTest {
         transitionTable.addTransition(q4, zero, q4);
         transitionTable.addTransition(q4, one, q4);
 
+        SetOfStates inputStates = new SetOfStates(q1, q2, q3, q4);
 
-        HashSet<State> inputStates = new HashSet<>();
-        inputStates.add(q1);
-        inputStates.add(q2);
-        inputStates.add(q3);
-        inputStates.add(q4);
-
-        HashSet<Alphabet> inputAlphabets = new HashSet<>();
-        inputAlphabets.add(zero);
-        inputAlphabets.add(one);
-
-        assertTrue(transitionTable.isValidFor(inputStates, inputAlphabets));
+        assertTrue(transitionTable.isValidFor(inputStates, new AlphabetSet(zero, one)));
     }
 
     @Test
@@ -85,18 +76,9 @@ public class TransitionTableTest {
         transitionTable.addTransition(q3, zero, q3);
         transitionTable.addTransition(q3, one, q4);
         transitionTable.addTransition(q4, zero, q4);
-        transitionTable.addTransition(q4, one, q4);
 
+        SetOfStates inputStates = new SetOfStates(q1, q2, q3);
 
-        HashSet<State> inputStates = new HashSet<>();
-        inputStates.add(q1);
-        inputStates.add(q2);
-        inputStates.add(q3);
-        inputStates.add(q4);
-
-        HashSet<Alphabet> inputAlphabets = new HashSet<>();
-        inputAlphabets.add(zero);
-
-        assertFalse(transitionTable.isValidFor(inputStates,inputAlphabets));
+        assertFalse(transitionTable.isValidFor(inputStates, new AlphabetSet(zero)));
     }
 }

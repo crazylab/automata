@@ -1,15 +1,13 @@
-package main;
+package main.machine;
 
-import main.components.Alphabet;
-import main.components.State;
-import main.components.TransitionTable;
+import main.exceptions.InvalidMachineDefinition;
+import main.components.*;
 import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.Arrays;
-import java.util.HashSet;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -20,16 +18,11 @@ public class DFATest {
         State q1 = new State("q1");                     //Initial State
         State q2 = new State("q2");                     //Final State
         State q3 = new State("q3");                     //Dead state
-        HashSet<State> setOfState = new HashSet<>();
-        setOfState.add(q1);
-        setOfState.add(q2);
-        setOfState.add(q3);
+        SetOfStates setOfStates = new SetOfStates(q1, q2, q3);
 
         Alphabet one = new Alphabet("1");
         Alphabet zero = new Alphabet("0");
-        HashSet<Alphabet> setOfAlphabet = new HashSet<>();
-        setOfAlphabet.add(one);
-        setOfAlphabet.add(zero);
+        AlphabetSet setOfAlphabetSet = new AlphabetSet(one, zero);
 
         TransitionTable transitionTable = new TransitionTable();
         //Recognizes power of two
@@ -40,13 +33,12 @@ public class DFATest {
         transitionTable.addTransition(q3, one, q3);
         transitionTable.addTransition(q3, zero, q3);
 
-        HashSet<State> finalStates = new HashSet<>();
-        finalStates.add(q2);
+        SetOfStates finalStates = new SetOfStates(q2);
 
-        DFA DFA = main.DFA.build(setOfState, setOfAlphabet, q1, transitionTable, finalStates);
+        DFA dfa = DFA.build(setOfStates, setOfAlphabetSet, q1, transitionTable, finalStates);
 
-        assertTrue(DFA.isAccepted(Arrays.asList(zero, one, zero, zero)));
-        assertFalse(DFA.isAccepted(Arrays.asList(zero, one, zero, zero, one, zero)));
+        assertTrue(dfa.isAccepted("0100"));
+        assertFalse(dfa.isAccepted("010010"));
     }
 
     @Rule
@@ -57,16 +49,10 @@ public class DFATest {
         State q1 = new State("q1");                     //Initial State
         State q2 = new State("q2");                     //Final State
         State q3 = new State("q3");                     //Dead state
-        HashSet<State> setOfState = new HashSet<>();
-        setOfState.add(q1);
-        setOfState.add(q2);
-        setOfState.add(q3);
+        SetOfStates setOfStates = new SetOfStates(q1, q2, q3);
 
         Alphabet one = new Alphabet("1");
         Alphabet zero = new Alphabet("0");
-        HashSet<Alphabet> setOfAlphabet = new HashSet<>();
-        setOfAlphabet.add(one);
-        setOfAlphabet.add(zero);
 
         TransitionTable transitionTable = new TransitionTable();
         //Recognizes power of two
@@ -76,13 +62,12 @@ public class DFATest {
         transitionTable.addTransition(q2, one, q3);
         transitionTable.addTransition(q3, one, q3);
 
-        HashSet<State> finalStates = new HashSet<>();
-        finalStates.add(q2);
+        SetOfStates finalStates = new SetOfStates(q2);
 
         thrown.expect(InvalidMachineDefinition.class);
         thrown.expectMessage(CoreMatchers.is("Transition table does not contains all the transitions required for the given tuple"));
 
-        DFA.build(setOfState, setOfAlphabet, q1, transitionTable, finalStates);
+        DFA.build(setOfStates, new AlphabetSet(zero, one), q1, transitionTable, finalStates);
     }
 
     @Test
@@ -90,16 +75,10 @@ public class DFATest {
         State q1 = new State("q1");                     //Initial State
         State q2 = new State("q2");                     //Final State
         State q3 = new State("q3");                     //Dead state
-        HashSet<State> setOfState = new HashSet<>();
-        setOfState.add(q1);
-        setOfState.add(q2);
-        setOfState.add(q3);
+        SetOfStates setOfStates = new SetOfStates(q1, q2, q3);
 
         Alphabet one = new Alphabet("1");
         Alphabet zero = new Alphabet("0");
-        HashSet<Alphabet> setOfAlphabet = new HashSet<>();
-        setOfAlphabet.add(one);
-        setOfAlphabet.add(zero);
 
         TransitionTable transitionTable = new TransitionTable();
         //Recognizes power of two
@@ -110,13 +89,12 @@ public class DFATest {
         transitionTable.addTransition(q3, one, q3);
         transitionTable.addTransition(q3, zero, q3);
 
-        HashSet<State> finalStates = new HashSet<>();
-        finalStates.add(new State("q10"));
+        SetOfStates finalStates = new SetOfStates(new State("q10"));
 
         thrown.expect(InvalidMachineDefinition.class);
         thrown.expectMessage(CoreMatchers.is("Set of states does not contains one or more final state"));
 
-        DFA.build(setOfState, setOfAlphabet, q1, transitionTable, finalStates);
+        DFA.build(setOfStates, new AlphabetSet(one, zero), q1, transitionTable, finalStates);
     }
 
 

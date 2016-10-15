@@ -1,26 +1,24 @@
-package main;
+package main.machine;
 
-import main.components.Alphabet;
-import main.components.State;
-import main.components.TransitionTable;
+import main.exceptions.InvalidMachineDefinition;
+import main.components.*;
 
 import java.util.List;
-import java.util.Set;
 
-class DFA {
+public class DFA {
     private final TransitionTable transitionTable;
     private final State startingState;
-    private Set<State> finalStates;
+    private SetOfStates finalStates;
 
-    public static DFA build(Set<State> setOfStates,
-                            Set<Alphabet> setOfAlphabet,
+    public static DFA build(SetOfStates setOfStates,
+                            AlphabetSet setOfAlphabet,
                             State startingState,
                             TransitionTable transitionTable,
-                            Set<State> finalStates) throws InvalidMachineDefinition {
+                            SetOfStates finalStates) throws InvalidMachineDefinition {
 
-        if(!transitionTable.isValidFor(setOfStates, setOfAlphabet)) {
+        if (!transitionTable.isValidFor(setOfStates, setOfAlphabet)) {
             throw new InvalidMachineDefinition("Transition table does not contains all the transitions required for the given tuple");
-        } else if(!setOfStates.containsAll(finalStates)){
+        } else if (!setOfStates.containsAll(finalStates)) {
             throw new InvalidMachineDefinition("Set of states does not contains one or more final state");
         }
         return new DFA(startingState, transitionTable, finalStates);
@@ -28,16 +26,16 @@ class DFA {
 
     private DFA(State startingState,
                 TransitionTable transitionTable,
-                Set<State> finalStates) {
+                SetOfStates finalStates) {
         this.startingState = startingState;
         this.transitionTable = transitionTable;
         this.finalStates = finalStates;
     }
 
-    boolean isAccepted(List<Alphabet> string) {
+    public boolean isAccepted(String string) {
         State presentState = startingState;
-        for (Alphabet alphabet : string) {
-            presentState = transitionTable.nextState(presentState, alphabet);
+        for (char alphabet : string.toCharArray()) {
+            presentState = transitionTable.nextState(presentState, new Alphabet(Character.toString(alphabet)));
         }
         return finalStates.contains(presentState);
     }
