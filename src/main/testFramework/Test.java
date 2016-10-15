@@ -9,12 +9,14 @@ import java.util.List;
 
 public class Test {
     private InputMachineDescription machineDesc;
+    private int success = 0;
+    private int fail = 0;
 
     public Test(InputMachineDescription machineDesc) {
         this.machineDesc = machineDesc;
     }
 
-    public void run() {
+    public String run() {
         System.out.println("TEST : " + machineDesc.name());
         System.out.println("Tuple Description : " + machineDesc.tupleDesc());
         DFA dfa = getMachine();
@@ -23,6 +25,7 @@ public class Test {
         System.out.println("\t\t----------------");
         assertFalse(dfa);
         System.out.println("-----------------------------------------------------------------------------------------");
+        return success + " Test Passed\n"+fail+" Test Failed";
     }
 
     private void assertTrue(DFA dfa) {
@@ -30,7 +33,13 @@ public class Test {
         System.out.println("Pass Cases: ");
         for (String inputString : passCases) {
             System.out.print("\tRunning \"" + inputString + "\" : ");
-            System.out.println(dfa.isAccepted(inputString) ? "Passed" : "Failed");
+            if (dfa.isAccepted(inputString)) {
+                System.out.println("Passed");
+                success++;
+            } else {
+                System.out.println("Failed");
+                fail++;
+            }
         }
     }
 
@@ -39,7 +48,13 @@ public class Test {
         System.out.println("Fail Cases: ");
         for (String inputString : passCases) {
             System.out.print("\tRunning " + inputString + " : ");
-            System.out.println((dfa.isAccepted(inputString) ? "Failed" : "Passed"));
+            if (dfa.isAccepted(inputString)) {
+                System.out.println("Failed");
+                fail++;
+            } else {
+                System.out.println("Success");
+                success++;
+            }
         }
     }
 

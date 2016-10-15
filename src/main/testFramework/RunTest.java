@@ -19,7 +19,8 @@ public class RunTest {
         while (jsonIterator.hasNext()) {
             InputMachineDescription machineDesc = new InputMachineDescription(jsonIterator.next().toString());
             Test test = new Test(machineDesc);
-            test.run();
+            System.out.println(test.run());
+
         }
     }
 }
