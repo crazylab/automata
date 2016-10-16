@@ -26,11 +26,11 @@ public class TransitionTable {
         return transitions.get(presentState).get(alphabet);
     }
 
-    public boolean isValidFor(SetOfStates states, AlphabetSet alphabetSet) {
+    public boolean isValid(States states, Alphabets alphabets) {
         if (states.equals(transitions.keySet())) {
             for (State state : transitions.keySet()) {
                 Set<Alphabet> allAlphabets = transitions.get(state).keySet();
-                if (!alphabetSet.equals(allAlphabets)) return false;
+                if (!alphabets.equals(allAlphabets)) return false;
             }
             return true;
         }

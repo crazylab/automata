@@ -1,84 +1,65 @@
-package main.components;
+package main.compbnts;
 
-import org.junit.Before;
+import main.TestCase;
+import main.components.States;
+import main.components.TransitionTable;
 import org.junit.Test;
-
-import java.util.HashSet;
 
 import static junit.framework.Assert.*;
 
-public class TransitionTableTest {
-
-    private State q1;
-    private Alphabet zero;
-    private State q2;
-    private Alphabet one;
-    private State q3;
-    private State q4;
-
-    @Before
-    public void setUp() throws Exception {
-        q1 = new State("q1");
-        q2 = new State("q2");
-        q3 = new State("q3");
-        q4 = new State("q4");
-
-        zero = new Alphabet("0");
-        one = new Alphabet("1");
-    }
-
+public class TransitionTableTest extends TestCase{
     @Test
     public void ShouldBeAbleToGetTheNextStateGivenTheCurrentStateWithAlphabet() throws Exception {
         TransitionTable transitionTable = new TransitionTable();
-        transitionTable.addTransition(q1, zero, q2);
-        transitionTable.addTransition(q1, one, q1);
-        transitionTable.addTransition(q2, zero, q2);
-        transitionTable.addTransition(q2, one, q3);
-        transitionTable.addTransition(q3, zero, q3);
-        transitionTable.addTransition(q3, one, q4);
-        transitionTable.addTransition(q4, zero, q4);
-        transitionTable.addTransition(q4, one, q4);
+        transitionTable.addTransition(q1, a, q2);
+        transitionTable.addTransition(q1, b, q1);
+        transitionTable.addTransition(q2, a, q2);
+        transitionTable.addTransition(q2, b, q3);
+        transitionTable.addTransition(q3, a, q3);
+        transitionTable.addTransition(q3, b, q4);
+        transitionTable.addTransition(q4, a, q4);
+        transitionTable.addTransition(q4, b, q4);
 
-        assertEquals(q2, transitionTable.nextState(q1, zero));
-        assertEquals(q1, transitionTable.nextState(q1, one));
-        assertEquals(q2, transitionTable.nextState(q2, zero));
-        assertEquals(q3, transitionTable.nextState(q2, one));
-        assertEquals(q3, transitionTable.nextState(q3, zero));
-        assertEquals(q4, transitionTable.nextState(q3, one));
-        assertEquals(q4, transitionTable.nextState(q4, zero));
-        assertEquals(q4, transitionTable.nextState(q4, one));
+        assertEquals(q2, transitionTable.nextState(q1, a));
+        assertEquals(q1, transitionTable.nextState(q1, b));
+        assertEquals(q2, transitionTable.nextState(q2, a));
+        assertEquals(q3, transitionTable.nextState(q2, b));
+        assertEquals(q3, transitionTable.nextState(q3, a));
+        assertEquals(q4, transitionTable.nextState(q3, b));
+        assertEquals(q4, transitionTable.nextState(q4, a));
+        assertEquals(q4, transitionTable.nextState(q4, b));
     }
 
     @Test
     public void ShouldReturnTrueWhenTableContainsAllTheGivenStates() throws Exception {
         TransitionTable transitionTable = new TransitionTable();
-        transitionTable.addTransition(q1, zero, q2);
-        transitionTable.addTransition(q1, one, q1);
-        transitionTable.addTransition(q2, zero, q2);
-        transitionTable.addTransition(q2, one, q3);
-        transitionTable.addTransition(q3, zero, q3);
-        transitionTable.addTransition(q3, one, q4);
-        transitionTable.addTransition(q4, zero, q4);
-        transitionTable.addTransition(q4, one, q4);
+        transitionTable.addTransition(q1, a, q2);
+        transitionTable.addTransition(q1, b, q1);
+        transitionTable.addTransition(q2, a, q2);
+        transitionTable.addTransition(q2, b, q3);
+        transitionTable.addTransition(q3, a, q3);
+        transitionTable.addTransition(q3, b, q4);
+        transitionTable.addTransition(q4, a, q4);
+        transitionTable.addTransition(q4, b, q4);
 
-        SetOfStates inputStates = new SetOfStates(q1, q2, q3, q4);
+        States inputStates = statesContaining(q1,q2,q3,q4);
 
-        assertTrue(transitionTable.isValidFor(inputStates, new AlphabetSet(zero, one)));
+        assertTrue(transitionTable.isValid(inputStates, alphabetsContaining(a, b)));
     }
 
     @Test
     public void ShouldReturnFalseWhenTableDoesNotContainsAnyOfTheStateOrHasMissingTransitionForGivenStatesAndAlphabets() throws Exception {
         TransitionTable transitionTable = new TransitionTable();
-        transitionTable.addTransition(q1, zero, q2);
-        transitionTable.addTransition(q1, one, q1);
-        transitionTable.addTransition(q2, zero, q2);
-        transitionTable.addTransition(q2, one, q3);
-        transitionTable.addTransition(q3, zero, q3);
-        transitionTable.addTransition(q3, one, q4);
-        transitionTable.addTransition(q4, zero, q4);
+        transitionTable.addTransition(q1, a, q2);
+        transitionTable.addTransition(q1, b, q1);
+        transitionTable.addTransition(q2, a, q2);
+        transitionTable.addTransition(q2, b, q3);
+        transitionTable.addTransition(q3, a, q3);
+        transitionTable.addTransition(q3, b, q4);
+        transitionTable.addTransition(q4, a, q4);
 
-        SetOfStates inputStates = new SetOfStates(q1, q2, q3);
+        States inputStates = statesContaining(q1, q2, q3);
 
-        assertFalse(transitionTable.isValidFor(inputStates, new AlphabetSet(zero)));
+        assertFalse(transitionTable.isValid(inputStates, alphabetsContaining(a)));
     }
 }

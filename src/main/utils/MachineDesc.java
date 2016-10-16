@@ -2,7 +2,6 @@ package main.utils;
 
 import main.components.*;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.Collection;
@@ -10,23 +9,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class InputMachineDescription {
+public class MachineDesc {
 
     private JSONObject machineDesc;
 
-    public InputMachineDescription(String machineDesc) throws ParseException {
-        this.machineDesc = (JSONObject) new JSONParser().parse(machineDesc);
+    public MachineDesc(JSONObject machineDesc) throws ParseException {
+        this.machineDesc = machineDesc;
     }
 
     public String name() {
         return (String) machineDesc.get("name");
     }
 
-    public String getType() {
+    public String type() {
         return (String) machineDesc.get("type");
     }
 
-    public SetOfStates states() {
+    public States states() {
         JSONObject tuple = (JSONObject) machineDesc.get("tuple");
         Collection<String> statesAsArray = (Collection<String>) tuple.get("states");
 
@@ -34,10 +33,10 @@ public class InputMachineDescription {
         for (String stateName : statesAsArray) {
             states.add(new State(stateName));
         }
-        return new SetOfStates(states);
+        return new States(states);
     }
 
-    public SetOfStates finalStates() {
+    public States finalStates() {
         JSONObject tuple = (JSONObject) machineDesc.get("tuple");
         Collection<String> finalStatesAsArray = (Collection<String>) tuple.get("final-states");
 
@@ -45,22 +44,22 @@ public class InputMachineDescription {
         for (String stateName : finalStatesAsArray) {
             finalStates.add(new State(stateName));
         }
-        return new SetOfStates(finalStates);
+        return new States(finalStates);
     }
 
-    public State startState() {
+    public State start() {
         JSONObject tuple = (JSONObject) machineDesc.get("tuple");
         return new State((String) tuple.get("start-state"));
     }
 
-    public AlphabetSet alphabets() {
+    public Alphabets alphabets() {
         JSONObject tuple = (JSONObject) machineDesc.get("tuple");
         Collection<String> alphabetCollection = (Collection<String>) tuple.get("alphabets");
         HashSet<Alphabet> alphabets = new HashSet<>();
         for (String alphabetName : alphabetCollection) {
             alphabets.add(new Alphabet(alphabetName));
         }
-        return new AlphabetSet(alphabets);
+        return new Alphabets(alphabets);
     }
 
     public TransitionTable transitionTable() {

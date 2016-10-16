@@ -2,21 +2,21 @@ package main.testFramework;
 
 
 import main.exceptions.InvalidMachineDefinition;
-import main.machine.DFA;
-import main.utils.InputMachineDescription;
+import main.statemachine.DFA;
+import main.utils.MachineDesc;
 
 import java.util.List;
 
 public class Test {
-    private InputMachineDescription machineDesc;
+    private MachineDesc machineDesc;
     private int success = 0;
     private int fail = 0;
 
-    public Test(InputMachineDescription machineDesc) {
+    public Test(MachineDesc machineDesc) {
         this.machineDesc = machineDesc;
     }
 
-    public String run() {
+    public void run() {
         System.out.println("TEST : " + machineDesc.name());
         System.out.println("Tuple Description : " + machineDesc.tupleDesc());
         DFA dfa = getMachine();
@@ -24,8 +24,10 @@ public class Test {
         assertTrue(dfa);
         System.out.println("\t\t----------------");
         assertFalse(dfa);
+        System.out.println("\nSummary : ");
+        System.out.println("\t" + success + " Test Passed");
+        System.out.println("\t" + fail + " Test Failed");
         System.out.println("-----------------------------------------------------------------------------------------");
-        return success + " Test Passed\n"+fail+" Test Failed";
     }
 
     private void assertTrue(DFA dfa) {
@@ -47,7 +49,7 @@ public class Test {
         List<String> passCases = machineDesc.failCases();
         System.out.println("Fail Cases: ");
         for (String inputString : passCases) {
-            System.out.print("\tRunning " + inputString + " : ");
+            System.out.print("\tRunning \"" + inputString + "\" : ");
             if (dfa.isAccepted(inputString)) {
                 System.out.println("Failed");
                 fail++;
@@ -62,7 +64,7 @@ public class Test {
         try {
             return DFA.build(machineDesc.states(),
                     machineDesc.alphabets(),
-                    machineDesc.startState(),
+                    machineDesc.start(),
                     machineDesc.transitionTable(),
                     machineDesc.finalStates());
         } catch (InvalidMachineDefinition invalidMachineDefinition) {
